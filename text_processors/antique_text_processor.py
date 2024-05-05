@@ -1,15 +1,11 @@
 from typing import List
-
 from overrides import overrides
-
 from text_processors.base_text_processor import BaseTextProcessor
-
 
 class AntiqueTextProcessor(BaseTextProcessor):
 
     @overrides
     def process(self, text) -> List[str]:
-        # TODO: ADD YOUR OWN IMPLEMENTATION
-        pass
+        processed_text = super().process(text)
 
-    # TODO: DEFINE OTHER TEXT PROCESSING METHODS
+        return processed_text
