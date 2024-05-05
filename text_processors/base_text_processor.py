@@ -17,9 +17,12 @@ class BaseTextProcessor:
     def convert_to_lowercase(self, text: str) -> str:
         return text.lower()
 
+    def tokenizer_word(self, text: str) -> List[str]:
+        return word_tokenize(text)
+
     def remove_stopwords(self, text: str) -> List[str]:
         stop_words = set(stopwords.words('english'))
-        tokens = word_tokenize(text)
+        tokens = self.tokenizer_word(text)
         filtered_text = [word for word in tokens if word not in stop_words and word not in string.punctuation]
         return filtered_text
 
