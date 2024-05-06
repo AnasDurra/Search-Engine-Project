@@ -8,6 +8,7 @@ class AntiqueTextProcessor(BaseTextProcessor):
 
     @overrides
     def process(self, text) -> List[str]:
-        processed_text = self.remove_stopwords(text)
-        processed_text = self.lemmatize(processed_text)  # Add lemmatization
+        tokens = self.word_tokenizer(text)
+        tokens = self.remove_stopwords(tokens)
+        processed_text = self.lemmatize(tokens)
         return processed_text

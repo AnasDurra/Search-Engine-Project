@@ -8,6 +8,6 @@ class AntiqueEmbeddingModel(BaseEmbeddingModel):
     def __init__(self):
         super(AntiqueEmbeddingModel, self).__init__(
             model_name='antique',
-            dataset_reader=AntiqueReader(file_path=''),
+            dataset_reader=AntiqueReader(file_path='../data/test.txt'),
             text_processor=AntiqueTextProcessor(),
         )

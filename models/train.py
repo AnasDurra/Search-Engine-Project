@@ -13,6 +13,8 @@ action_id = int(input("Please select dataset to train (1 or 2): "))
 model: BaseEmbeddingModel
 if action_id == 1:
     model = AntiqueEmbeddingModel()
+    model.train()
+    print("Model Trained Successfully")
 elif action_id == 2:
     # model = TODO: CREATE AN INSTANCE OF WIKIPIDIA MODEL
     pass

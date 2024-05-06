@@ -1,6 +1,7 @@
 from overrides import overrides
 from dataset.dataset_reader import DatasetReader
 
+
 class AntiqueReader(DatasetReader):
     @overrides
     def load_as_dict(self) -> dict:
