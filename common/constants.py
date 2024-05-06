@@ -7,8 +7,8 @@ class Locations:
 
     @staticmethod
     def generate_model_path(model_name: str) -> str:
-        return f"engines/{model_name}/{Locations.MODEL_PATH}/{model_name}_model.pkl"
+        return f"../engines/{model_name}/{Locations.MODEL_PATH}/{model_name}_model.pkl"
 
     @staticmethod
     def generate_matrix_path(model_name: str) -> str:
-        return f"engines/{model_name}/{Locations.MATRIX_PATH}/{model_name}_matrix.pkl"
+        return f"../engines/{model_name}/{Locations.MATRIX_PATH}/{model_name}_matrix.pkl"

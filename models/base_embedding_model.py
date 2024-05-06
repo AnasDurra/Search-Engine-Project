@@ -28,7 +28,7 @@ class BaseEmbeddingModel:
         # TODO: CUSTOMIZE MODEL PREFERENCES AS YOU NEED IN SUBCLASS
         self.vectorizer = TfidfVectorizer(
             tokenizer=text_processor.process,
-            stop_words='english',
+            token_pattern=None,
             lowercase=True,
             max_df=0.5,
             min_df=2,
