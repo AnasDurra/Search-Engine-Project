@@ -10,7 +10,7 @@ class AntiqueTextProcessor(BaseTextProcessor):
     def process(self, text) -> List[str]:
         text = text.lower()
         tokens = self._word_tokenizer(text)
-        tokens = self._spell_check(tokens)
+        # tokens = self._spell_check(tokens)
         tokens = self._remove_stopwords(tokens)
         tokens = self._remove_punctuations(tokens)
         tokens = self._remove_whitespaces(tokens)
