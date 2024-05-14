@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
-from sqlalchemy.sql.functions import now
 from datetime import datetime
-from models.antique_embedding_model import AntiqueEmbeddingModel
-from models.base_embedding_model import BaseEmbeddingModel
+from models.tf_idf.antique_tf_idf_model import AntiqueTFIDFModel
+from models.tf_idf.base_tf_idf_model import BaseTFIDFModel
 
 print("""
 _____ _____ _____
@@ -16,11 +15,11 @@ _____ _____ _____
 load_dotenv()
 
 action_id = int(input("Please select dataset to train (1 or 2): "))
-model: BaseEmbeddingModel
+model: BaseTFIDFModel
 if action_id == 1:
     now = datetime.now()
     print("Start Time:" + now.strftime("%Y-%m-%d %H:%M:%S"))
-    model = AntiqueEmbeddingModel()
+    model = AntiqueTFIDFModel()
     model.train()
     print("Model Trained Successfully")
 elif action_id == 2:

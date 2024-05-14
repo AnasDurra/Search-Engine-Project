@@ -12,7 +12,7 @@ from dataset.dataset_reader import DatasetReader
 from text_processors.base_text_processor import BaseTextProcessor
 
 
-class BaseEmbeddingModel:
+class BaseTFIDFModel:
 
     # initialize default variables
     def __init__(
