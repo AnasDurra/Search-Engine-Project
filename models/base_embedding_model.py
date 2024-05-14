@@ -1,11 +1,14 @@
 from typing import Optional
 
+import pandas as pd
+import sklearn
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from common.constants import Locations
 from common.file_utilities import FileUtilities
 from dataset.dataset_reader import DatasetReader
 from text_processors.base_text_processor import BaseTextProcessor
+from tqdm import tqdm
 
 
 class BaseEmbeddingModel:
@@ -41,6 +44,8 @@ class BaseEmbeddingModel:
         # first, load the dataset
         dataset: dict = self.dataset_reader.load_as_dict()
 
+        print('finished loading')
+
         # extract the list of data based on the number_of_docs argument
         if number_of_docs is not None:
             documents: list = list(dataset.values())[:number_of_docs]
@@ -55,3 +60,7 @@ class BaseEmbeddingModel:
 
         # store the vectorizer model (in project folder called engines)
         FileUtilities.save_file(Locations.generate_model_path(self.model_name), self.vectorizer)
+        df = pd.DataFrame(tfidf_matrix.toarray(), columns=self.vectorizer.get_feature_names_out(), index=dataset.keys())
+        #print(df.to_markdown())
+
+

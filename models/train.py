@@ -1,5 +1,6 @@
 from models.antique_embedding_model import AntiqueEmbeddingModel
 from models.base_embedding_model import BaseEmbeddingModel
+from models.wikipedia_embedding_model import WikipediaEmbeddingModel
 
 print("""
 _____ _____ _____
@@ -14,9 +15,12 @@ model: BaseEmbeddingModel
 if action_id == 1:
     model = AntiqueEmbeddingModel()
     model.train()
-    print("Model Trained Successfully")
+    print("Model Antique Trained Successfully")
 elif action_id == 2:
-    # model = TODO: CREATE AN INSTANCE OF WIKIPIDIA MODEL
-    pass
+    # model = TODO: CREATE AN INSTANCE OF WIKIPEDIA MODEL
+    print("Model Wiki Train started")
+    model = WikipediaEmbeddingModel()
+    model.train()
+    print("Model Wiki Trained Successfully")
 else:
     print("Invalid option")
