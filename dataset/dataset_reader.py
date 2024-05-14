@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 
 class DatasetReader:
-    def __init__(self, file_path):
+    def __init__(self, file_path: str):
         self.file_path = file_path
 
     @abstractmethod
