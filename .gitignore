@@ -1,3 +1,7 @@
 data
-engines
-.env
+engines/antique/matrix/*
+!engines/antique/matrix/.gitkeep
+engines/antique/model/*
+!engines/antique/model/.gitkeep
+*.env
+*.log

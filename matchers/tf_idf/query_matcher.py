@@ -11,10 +11,12 @@ from database.mongo_helper import MongoDBConnection
 class QueryMatcher:
     def __init__(self, model_name: str):
         # load the TF-IDF Matrix
-        self.matrix = FileUtilities.load_file(Locations.generate_stored_matrix_path(model_name))
+        matrix_path: str = Locations.generate_matrix_path(model_name)
+        self.matrix = FileUtilities.load_file(matrix_path)
 
         # load the model
-        self.model: TfidfVectorizer = FileUtilities.load_file(Locations.generate_stored_model_path(model_name))
+        model_path: str = Locations.generate_model_path(model_name)
+        self.model: TfidfVectorizer = FileUtilities.load_file(model_path)
 
         # variable that affect engine accuracy
         self.threshold = float(os.environ.get('SIMILARITY_THRESHOLD', 0.5))
@@ -29,6 +31,7 @@ class QueryMatcher:
         print(f"Query: {query}")
         # vectorize the query.
         query_vector = self.__vectorize_query(query)
+        print(query_vector)
 
         # Calculate cosine similarity between query vector and document vectors
         cos_similarities = cosine_similarity(self.matrix, query_vector)

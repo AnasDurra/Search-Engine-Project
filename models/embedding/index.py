@@ -1,20 +1,21 @@
-from dotenv import load_dotenv
-from sqlalchemy.sql.functions import now
+import logging
 from datetime import datetime
-from models.antique_embedding_model import AntiqueEmbeddingModel
-from models.base_embedding_model import BaseEmbeddingModel
+from dotenv import load_dotenv
+from models.embedding.antique_embedding_model import AntiqueEmbeddingModel
+from models.embedding.base_embedding_model import BaseEmbeddingModel
+
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 print("""
 _____ _____ _____
 
 1. Antique
-2. Wikipidia
+2. Wikipedia
 
 _____ _____ _____
 """)
 # Load environment variables from .env file
 load_dotenv()
-
 action_id = int(input("Please select dataset to train (1 or 2): "))
 model: BaseEmbeddingModel
 if action_id == 1:
@@ -24,7 +25,7 @@ if action_id == 1:
     model.train()
     print("Model Trained Successfully")
 elif action_id == 2:
-    # model = TODO: CREATE AN INSTANCE OF WIKIPIDIA MODEL
+    # model = TODO: CREATE AN INSTANCE OF WIKIPEDIA MODEL
     pass
 else:
     print("Invalid option")

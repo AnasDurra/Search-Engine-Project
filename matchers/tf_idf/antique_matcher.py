@@ -1,5 +1,5 @@
 from common.constants import Locations
-from matchers.query_matcher import QueryMatcher
+from matchers.tf_idf.query_matcher import QueryMatcher
 
 
 class AntiqueMatcher(QueryMatcher):

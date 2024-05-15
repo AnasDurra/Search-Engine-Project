@@ -6,7 +6,7 @@ class MongoDBConnection:
     __instance = None
 
     @staticmethod
-    def get_instance():
+    def get_instance() -> 'MongoDBConnection':
         """
         Static method to get the singleton instance of the MongoDBConnection class.
         """
