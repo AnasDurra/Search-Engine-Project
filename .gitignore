@@ -1,7 +1,20 @@
-data
+data/*
+# exclude datasets
 engines/antique/matrix/*
 !engines/antique/matrix/.gitkeep
 engines/antique/model/*
 !engines/antique/model/.gitkeep
+engines/antique/embeddings_model/*
+!engines/antique/embeddings_model/.gitkeep
+
+engines/wikipidia/matrix/*
+!engines/wikipidia/matrix/.gitkeep
+engines/wikipidia/model/*
+!engines/wikipidia/model/.gitkeep
+engines/wikipidia/embeddings_model/*
+!engines/wikipidia/embeddings_model/.gitkeep
+
+chroma/*
+
 *.env
 *.log
