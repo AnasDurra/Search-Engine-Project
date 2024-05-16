@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 
 from matchers.antique_matcher import AntiqueMatcher
+from matchers.wikipedia_matcher import WikipediaMatcher
 from text_processors.antique_text_processor import AntiqueTextProcessor
 
 # Load environment variables from .env file

@@ -14,8 +14,4 @@ class WikipediaTextProcessor(BaseTextProcessor):
         tokens = self._remove_whitespaces(tokens)
         processed_text = self._lemmatize(tokens)
 
-
-        # print("First 10 processed tokens:")
-        # print(processed_text[:10])
-
         return processed_text

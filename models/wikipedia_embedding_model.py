@@ -10,7 +10,7 @@ class WikipediaEmbeddingModel(BaseEmbeddingModel):
     def __init__(self):
         super(WikipediaEmbeddingModel, self).__init__(
             model_name='wikipedia',
-            dataset_reader=WikipediaReader(file_path='../data/wikipedia-en.csv'),
+            dataset_reader=WikipediaReader(file_path=os.environ.get('WIKIPEDIA_DATASET_PATH', '../data/wikipedia'
+                                                                                              '/wikipedia-en.csv')),
             text_processor=WikipediaTextProcessor(),
         )
-        print(os.getenv('WIKIPEDIA_DATASET_PATH'))

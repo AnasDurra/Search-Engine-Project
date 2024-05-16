@@ -15,7 +15,6 @@ class QueryMatcher:
 
         # load the model
         self.model: TfidfVectorizer = FileUtilities.load_file(Locations.generate_stored_model_path(model_name))
-
         # variable that affect engine accuracy
         self.threshold = float(os.environ.get('SIMILARITY_THRESHOLD', 0.5))
 

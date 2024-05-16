@@ -56,6 +56,7 @@ class BaseEmbeddingModel:
         else:
             documents: list = list(dataset.values())
 
+        print('hi 2')
         # pass the training documents to the model
         tfidf_matrix = self.vectorizer.fit_transform(documents)
 

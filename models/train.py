@@ -27,6 +27,8 @@ if action_id == 1:
 elif action_id == 2:
     # model = TODO: CREATE AN INSTANCE OF WIKIPEDIA MODEL
     print("Model Wiki Train started")
+    now = datetime.now()
+    print("Start Time:" + now.strftime("%Y-%m-%d %H:%M:%S"))
     model = WikipediaEmbeddingModel()
     model.train()
     print("Model Wiki Trained Successfully")
