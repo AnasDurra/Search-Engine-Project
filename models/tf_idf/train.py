@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 from models.tf_idf.antique_tf_idf_model import AntiqueTFIDFModel
 from models.tf_idf.base_tf_idf_model import BaseTFIDFModel
+from models.tf_idf.wikipedia_tf_idf_model import WikipediaTFIDFModel
 
 print("""
 _____ _____ _____
@@ -23,8 +24,11 @@ if action_id == 1:
     model.train()
     print("Model Trained Successfully")
 elif action_id == 2:
-    # model = TODO: CREATE AN INSTANCE OF WIKIPIDIA MODEL
-    pass
+    now = datetime.now()
+    print("Start Time:" + now.strftime("%Y-%m-%d %H:%M:%S"))
+    model = WikipediaTFIDFModel()
+    model.train()
+    print("Model Trained Successfully")
 else:
     print("Invalid option")
 

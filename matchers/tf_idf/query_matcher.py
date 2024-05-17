@@ -10,28 +10,28 @@ from database.mongo_helper import MongoDBConnection
 
 class QueryMatcher:
     def __init__(self, model_name: str):
-        # load the TF-IDF Matrix
+        # Load the TF-IDF Matrix
         matrix_path: str = Locations.generate_matrix_path(model_name)
         self.matrix = FileUtilities.load_file(matrix_path)
 
-        # load the model
+        # Load the model
         model_path: str = Locations.generate_model_path(model_name)
         self.model: TfidfVectorizer = FileUtilities.load_file(model_path)
 
-        # variable that affect engine accuracy
+        # Variable that affects engine accuracy
         self.threshold = float(os.environ.get('SIMILARITY_THRESHOLD', 0.5))
 
-        # database client
+        # Database client
         self.db_collection = MongoDBConnection.get_instance().get_collection(model_name)
 
     def __vectorize_query(self, query: str):
         return self.model.transform([query])
 
-    def match(self, query: str, top: int = 10):
+    def match(self, query: str):
         print(f"Query: {query}")
-        # vectorize the query.
+        # Vectorize the query
         query_vector = self.__vectorize_query(query)
-        print(query_vector)
+        # print(query_vector)
 
         # Calculate cosine similarity between query vector and document vectors
         cos_similarities = cosine_similarity(self.matrix, query_vector)
@@ -39,14 +39,10 @@ class QueryMatcher:
         # Sort the cosine similarities in descending order
         sorted_indices = np.argsort(cos_similarities, axis=0)[::-1]
 
-        # Get top k result based on input
+        # Get all matching documents indices based on threshold
         matching_docs_indices = []
         for i in sorted_indices:
-
-            if len(matching_docs_indices) > top:
-                break
-
-            if cos_similarities[i] >= self.threshold:
+            if cos_similarities[i].item() >= self.threshold:
                 matching_docs_indices.append(i.item())
 
         # Get the documents associated with the sorted cosine similarities
