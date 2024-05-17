@@ -1,8 +1,11 @@
 from typing import List
+import re
+
+import numpy as np
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag
+from nltk import pos_tag, PorterStemmer
 from nltk.corpus import wordnet
 import string
 
@@ -25,6 +28,8 @@ class BaseTextProcessor:
         self.lemmatizer = WordNetLemmatizer()
         self.pos_tagger = pos_tag
         self.spell_checker = SpellChecker()
+        #---------------------------------
+        self.stemmer = PorterStemmer()
 
     def process(self, text) -> List[str]:
         pass
@@ -53,3 +58,51 @@ class BaseTextProcessor:
 
     def _spell_check(self, tokens: List[str]) -> List[str]:
         return [self.spell_checker.correction(token) for token in tokens]
+
+    # ---------------------------------------------------------------------------
+    @staticmethod
+    def remove_markers(tokens: List[str]) -> List[str]:
+        new_tokens = []
+        for token in tokens:
+            new_tokens.append(re.sub(r'\u00AE', '', token))
+        return new_tokens
+
+    @staticmethod
+    def replace_under_score_with_space(tokens: List[str]) -> List[str]:
+        new_tokens = []
+        for token in tokens:
+            new_tokens.append(re.sub(r'_', ' ', token))
+        return new_tokens
+
+    @staticmethod
+    def remove_apostrophe(tokens: List[str]) -> List[str]:
+        new_tokens = []
+        for token in tokens:
+            new_tokens.append(str(np.char.replace(token, "'", " ")))
+        return new_tokens
+
+    @staticmethod
+    def normalize_abbreviations(tokens: List[str]) -> List[str]:
+        resolved_terms = {}
+        for token in tokens:
+
+            if len(token) >= 2:
+                synsets = wordnet.synsets(token)
+                if synsets:
+                    resolved_term = synsets[0].lemmas()[0].name()
+                    resolved_terms[token] = resolved_term
+
+        for abbreviation, resolved_term in resolved_terms.items():
+            for i in range(len(tokens)):
+                if tokens[i] == abbreviation:
+                    tokens[i] = resolved_term
+                    break
+
+        return tokens
+
+    def stemming(self, tokens: List[str]) -> List[str]:
+        new_tokens = []
+        for token in tokens:
+            new_tokens.append(self.stemmer.stem(token))
+        return new_tokens
+

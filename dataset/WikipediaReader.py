@@ -30,7 +30,6 @@ class WikipediaReader(DatasetReader, ABC):
 
         return key_value_pairs
 
-
     @overrides
     def read_queries(self) -> dict:
         queries_path = os.environ.get('WIKIPEDIA_QUERIES_PATH', '../data/wikipedia/queries.csv')
@@ -44,14 +43,17 @@ class WikipediaReader(DatasetReader, ABC):
 
     @overrides
     def read_qrels(self) -> defaultdict:
-        qrels_path = os.environ.get('WIKIPEDIA_QRELS_PATH', '../data/wikipedia/qrels.csv')
+        qrels_path = os.environ.get('WIKIPEDIA_QRELS_PATH', '../data/wikipedia/qrels')
         qrels = defaultdict(dict)
+
         with open(qrels_path, 'r') as f:
-            next(f)  # Skip header
             for line in f:
-                _, query_id, doc_id, relevance = line.strip().split(',')
+                parts = line.strip().split('\t')
+                query_id, _, doc_id, relevance = parts
                 qrels[query_id][doc_id] = int(relevance)
+
         return qrels
+
 
 if __name__ == "__main__":
 
