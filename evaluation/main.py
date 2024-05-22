@@ -19,7 +19,7 @@ def get_user_input():
     return dataset_name, do_embedding
 
 
-def load_data(dataset_name): #TODO embedding
+def load_data(dataset_name):  # TODO: embedding
     if dataset_name.lower() == 'antique':
         file_path = os.environ.get('ANTIQUE_DATASET_PATH')
         reader = AntiqueReader(file_path)

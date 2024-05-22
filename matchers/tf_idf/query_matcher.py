@@ -27,7 +27,7 @@ class QueryMatcher:
     def __vectorize_query(self, query: str):
         return self.model.transform([query])
 
-    def match(self, query: str):
+    def match(self, query: str, n):
         print(f"Query: {query}")
         # Vectorize the query
         query_vector = self.__vectorize_query(query)
@@ -43,10 +43,11 @@ class QueryMatcher:
         matching_docs_indices = []
         for i in sorted_indices:
             if cos_similarities[i].item() >= self.threshold:
-                matching_docs_indices.append(i.item())
+                matching_docs_indices.append(i.item()+1)
 
         # Get the documents associated with the sorted cosine similarities
         matching_results = list(self.db_collection.find({"index": {"$in": matching_docs_indices}}))
+
         return sorted(
             matching_results,
             key=lambda x: matching_docs_indices.index(x['index']),
