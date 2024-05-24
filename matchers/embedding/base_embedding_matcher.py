@@ -24,10 +24,25 @@ class BaseEmbeddingMatcher:
         query_embeddings: List = self.model.infer_vector(processed_query).tolist()
 
         # query the vector db for similar docs.
-        return self.vector_collection.query(
+        result = self.vector_collection.query(
             query_embeddings=query_embeddings,
             n_results=top,
         )
+
+        # Transforming the output to the desired format
+        transformed_results = []
+        ids = result.get('ids', [[]])[0]
+        documents = result.get('documents', [[]])[0]
+        distances = result.get('distances', [[]])[0]
+
+        for doc_id, doc_content, doc_similarity in zip(ids, documents, distances):
+            transformed_results.append({
+                'doc_id': doc_id,
+                'doc_content': doc_content,
+                'similarity': doc_similarity,
+            })
+
+        return transformed_results
 
     @staticmethod
     def __load_model(model_name: str):

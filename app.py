@@ -1,14 +1,16 @@
 from dotenv import load_dotenv
 
+from matchers.embedding.antique_embedding_matcher import AntiqueEmbeddingMatcher
 from matchers.tf_idf.antique_matcher import AntiqueMatcher
 from text_processors.antique_text_processor import AntiqueTextProcessor
 
 # Load environment variables from .env file
 load_dotenv()
 
-matcher: AntiqueMatcher = AntiqueMatcher()
+matcher: AntiqueEmbeddingMatcher = AntiqueEmbeddingMatcher()
+# matcher: AntiqueMatcher = AntiqueMatcher()
 query: str = input("Enter a query: ")
-print(matcher.match(query, 10))
+print(matcher.match(query))
 # from datetime import datetime
 #
 # from text_processors.antique_text_processor import AntiqueTextProcessor

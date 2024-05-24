@@ -1,3 +1,4 @@
+.env
 data/*
 # exclude datasets
 engines/antique/matrix/*
@@ -16,5 +17,4 @@ engines/wikipidia/embeddings_model/*
 
 chroma/*
 
-*.env
 *.log

@@ -52,22 +52,6 @@ class Locations:
             os.makedirs(Locations.CHROMA_DIR)
         return Locations.CHROMA_DIR
 
-    # @staticmethod
-    # def generate_model_path(model_name: str) -> str:
-    #     return f"../engines/{model_name}/{Locations.MODEL_PATH}/{model_name}_model.pkl"
-
-    # @staticmethod
-    # def generate_stored_model_path(model_name: str) -> str:
-    #     return f"engines/{model_name}/{Locations.MODEL_PATH}/{model_name}_model.pkl"
-
-    # @staticmethod
-    # def generate_matrix_path(model_name: str) -> str:
-    #     return f"../engines/{model_name}/{Locations.MATRIX_PATH}/{model_name}_matrix.pkl"
-
-    # @staticmethod
-    # def generate_stored_matrix_path(model_name: str) -> str:
-    #     return f"engines/{model_name}/{Locations.MATRIX_PATH}/{model_name}_matrix.pkl"
-
 
 class DatasetNames:
     ANTIQUE: str = 'antique'

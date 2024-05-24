@@ -10,6 +10,9 @@ class AntiqueTFIDFModel(BaseTFIDFModel):
     def __init__(self):
         super(AntiqueTFIDFModel, self).__init__(
             model_name=DatasetNames.ANTIQUE,
-            dataset_reader=AntiqueReader(file_path=os.environ.get('ANTIQUE_DATASET_PATH', '../../data/antique.txt')),
+            dataset_reader=AntiqueReader(file_path=os.environ.get(
+                'ANTIQUE_DATASET_PATH',
+                '../../data/antique/antique.txt'
+            )),
             text_processor=AntiqueTextProcessor(),
         )
