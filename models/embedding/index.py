@@ -3,6 +3,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 from models.embedding.antique_embedding_model import AntiqueEmbeddingModel
 from models.embedding.base_embedding_model import BaseEmbeddingModel
+from models.embedding.wikipedia_embedding_model import WikipediaEmbeddingModel
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
@@ -25,7 +26,12 @@ if action_id == 1:
     model.train()
     print("Model Trained Successfully")
 elif action_id == 2:
-    # model = TODO: CREATE AN INSTANCE OF WIKIPEDIA MODEL
+    now = datetime.now()
+    print("Start Time:" + now.strftime("%Y-%m-%d %H:%M:%S"))
+    model = WikipediaEmbeddingModel()
+    model.train()
+    print("Model Trained Successfully")
+
     pass
 else:
     print("Invalid option")

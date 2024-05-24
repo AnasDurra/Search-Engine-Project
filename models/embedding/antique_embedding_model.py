@@ -10,9 +10,10 @@ class AntiqueEmbeddingModel(BaseEmbeddingModel):
 
     def __init__(self):
         model_name: str = 'antique'
-        antique_dataset_file_name: str = f'{model_name}.txt'
+        antique_dataset_file_path: str = os.environ.get('ANTIQUE_DATASET_PATH')
+        antique_reader: AntiqueReader = AntiqueReader(antique_dataset_file_path)
         super().__init__(
-            dataset_reader=AntiqueReader(Locations.generate_dataset_path(antique_dataset_file_name)),
+            dataset_reader=antique_reader,
             text_processor=AntiqueTextProcessor(),
             model_name=model_name
         )

@@ -16,6 +16,7 @@ import re
 import dateparser
 import country_converter as coco
 
+
 def get_wordnet_pos(tag_parameter):
     tag = tag_parameter[0].upper()
     tag_dict = {"J": wordnet.ADJ,
@@ -32,7 +33,7 @@ class BaseTextProcessor:
         self.lemmatizer = WordNetLemmatizer()
         self.pos_tagger = pos_tag
         self.spell_checker = SpellChecker()
-        #---------------------------------
+        # ---------------------------------
         self.stemmer = PorterStemmer()
 
     def process(self, text) -> List[str]:
@@ -111,7 +112,7 @@ class BaseTextProcessor:
         return new_tokens
 
 
- # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
 def _normalize_months(tokens: List[str]) -> List[str]:
     normalized_tokens = []
@@ -157,7 +158,7 @@ def _normalize_dates(tokens: List[str]) -> List[str]:
 def _normalize_country_name(tokens: List[str]) -> List[str]:
     normalized_text = []
     for token in tokens:
-        standard_name = coco.convert(names=token, to='name_short', not_found=None,)
+        standard_name = coco.convert(names=token, to='name_short', not_found=None, )
         # print(standard_name)
         if standard_name is not None:
             normalized_text.append(standard_name)
@@ -165,12 +166,9 @@ def _normalize_country_name(tokens: List[str]) -> List[str]:
             normalized_text.append(token)
     return normalized_text
 
+# tokens = _normalize_months(tokens)
+#      tokens = _normalize_days(tokens)
+#      tokens = _normalize_dates(tokens)  # this is slow
 
 
-
-   # tokens = _normalize_months(tokens)
-   #      tokens = _normalize_days(tokens)
-   #      tokens = _normalize_dates(tokens)  # this is slow
-
-
-   # tokens = _normalize_country_name(tokens)
+# tokens = _normalize_country_name(tokens)
