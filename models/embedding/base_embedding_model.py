@@ -61,12 +61,18 @@ class BaseEmbeddingModel:
 
         # Initialize Word2Vec model
         self.model = Word2Vec(
-            tokenized_docs,
+            min_count=1,
             vector_size=self.vector_size,
             workers=self.workers,
             epochs=self.epochs,
             sg=self.skip_gram,
         )
+
+        # prepare the model vocabulary
+        self.model.build_vocab(tokenized_docs)
+
+        # train word vectors
+        self.model.train(tokenized_docs, total_examples=self.model.corpus_count, epochs=self.epochs)
 
         # Save the model
         self.save_model()
