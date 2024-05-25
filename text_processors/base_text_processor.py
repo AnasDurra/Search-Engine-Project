@@ -47,22 +47,22 @@ class BaseTextProcessor:
 
     @staticmethod
     def _remove_registered_markers(tokens: List[str]) -> List[str]:
-        return [re.sub(r'\u00AE', '', token) for token in tokens if token is not None and token is str]
+        return [re.sub(r'\u00AE', '', token) for token in tokens if token is not None]
 
     @staticmethod
     def _strip_punctuation(tokens: List[str]) -> List[str]:
         return [
             token.translate(str.maketrans('', '', string.punctuation))
-            for token in tokens if token is not None and token is str
+            for token in tokens if token is not None
         ]
 
     @staticmethod
     def _eliminate_whitespaces(tokens: List[str]) -> List[str]:
-        return [token.replace('_', ' ') for token in tokens if token is not None and token is str]
+        return [re.sub(r'_', ' ', token) for token in tokens if token is not None]
 
     @staticmethod
     def _remove_apostrophes(tokens: List[str]) -> List[str]:
-        return [token.replace("'", " ") for token in tokens if token is not None and token is str]
+        return [str(np.char.replace(token, "'", " ")) for token in tokens if token is not None]
 
     def _apply_stemming(self, tokens: List[str]) -> List[str]:
         return [self.stemmer.stem(token) for token in tokens]
