@@ -1,11 +1,8 @@
-import decimal
 import os
-from typing import Optional
 
 import numpy as np
 from chromadb.api.models.Collection import Collection
-from gensim.models import Doc2Vec, Word2Vec
-from gensim.models.doc2vec import TaggedDocument
+from gensim.models import Word2Vec
 
 from common.constants import Locations
 from common.file_utilities import FileUtilities
@@ -93,7 +90,13 @@ class BaseEmbeddingModel:
 
             for doc in batch:
                 # Collect word vectors for the current document
-                doc_vectors = [self.model.wv[word] for word in doc['processed_doc'] if word in self.model.wv]
+                doc_vectors = []
+                for word in doc['processed_doc']:
+                    if word in self.model.wv:
+                        try:
+                            doc_vectors.append(self.model.wv[word])
+                        except KeyError:
+                            doc_vectors.append(np.random.rand(self.vector_size))
 
                 if doc_vectors:
                     # Calculate the mean vector if there are valid word vectors
