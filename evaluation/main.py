@@ -70,6 +70,7 @@ def save_evaluation_results(evaluation_results, dataset_name, do_embedding, aver
             f.write("Query ID".ljust(max_query_id_length + 5) + "Value\n")
             for query_id, metrics in evaluation_results.items():
                 metric_value = metrics[metric_name]
+                print(metric_value)
                 f.write(f"{query_id.ljust(max_query_id_length + 5)}, {metric_value:.6f}\n")
 
 
