@@ -29,6 +29,7 @@ class QueryMatcher:
 
     def match(self, query: str, n=None):
         print(f"Query: {query}")
+
         # Vectorize the query
         query_vector = self.__vectorize_query(query)
         # print(query_vector)
@@ -37,7 +38,7 @@ class QueryMatcher:
         cos_similarities = cosine_similarity(self.matrix, query_vector)
 
         # Sort the cosine similarities in descending order
-        sorted_indices = np.argsort(cos_similarities, axis=0)[::-1]
+        sorted_indices = np.argsort(cos_similarities, axis=0)[::-1].flatten()
 
         # Get all matching documents indices based on threshold
         matching_docs_indices = []
@@ -51,5 +52,5 @@ class QueryMatcher:
         return sorted(
             matching_results,
             key=lambda x: matching_docs_indices.index(x['index']),
-            reverse=True
+            reverse=False
         )

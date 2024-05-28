@@ -1,6 +1,9 @@
+import os
 from typing import List
 
-from gensim.models import Doc2Vec
+import numpy as np
+from gensim.models import Doc2Vec, Word2Vec
+from numpy import ndarray
 
 from common.constants import Locations
 from common.file_utilities import FileUtilities
@@ -12,16 +15,17 @@ class BaseEmbeddingMatcher:
 
     def __init__(self, model_name: str, text_processor: BaseTextProcessor):
         self.vector_collection = ChromaHelper.get_instance().get_or_create_collection(model_name)
-        self.model: Doc2Vec = self.__load_model(model_name)
+        self.vector_size = int(os.environ.get("VECTOR_SIZE", 500))
+        self.model: Word2Vec = self.__load_model(model_name)
         self.text_processor = text_processor
         self.model_name = model_name
 
     def match(self, text: str, top: int = 10):
         # preprocess the query
-        processed_query: List[str] = self.text_processor.process(text)
+        processed_query: List[str] = self.text_processor.process_query(text)
 
         # create embeddings
-        query_embeddings: List = self.model.infer_vector(processed_query).tolist()
+        query_embeddings: List = self.vectorize_query(processed_query).tolist()
 
         # query the vector db for similar docs.
         result = self.vector_collection.query(
@@ -43,6 +47,20 @@ class BaseEmbeddingMatcher:
             })
 
         return transformed_results
+
+    def vectorize_query(self, query_words: list[str]) -> ndarray:
+
+        # Collect query vectors for the query string
+        query_vectors = [self.model.wv[word] for word in query_words if word in self.model.wv]
+
+        if query_vectors:
+            # Calculate the mean vector if there are valid word vectors
+            query_vec = np.mean(query_vectors, axis=0)
+        else:
+            # Use an initial vector if there are no valid word vectors
+            query_vec = np.zeros(self.vector_size)
+
+        return query_vec
 
     @staticmethod
     def __load_model(model_name: str):

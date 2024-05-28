@@ -7,15 +7,16 @@ from text_processors.antique_text_processor import AntiqueTextProcessor
 # Load environment variables from .env file
 load_dotenv()
 
-matcher: AntiqueEmbeddingMatcher = AntiqueEmbeddingMatcher()
+# matcher: AntiqueEmbeddingMatcher = AntiqueEmbeddingMatcher()
 # matcher: AntiqueMatcher = AntiqueMatcher()
 query: str = input("Enter a query: ")
-print(matcher.match(query))
+# print(matcher.match(query))
 # from datetime import datetime
 #
 # from text_processors.antique_text_processor import AntiqueTextProcessor
 #
-# processor = AntiqueTextProcessor()
+processor = AntiqueTextProcessor()
+print(processor.process_query(query))
 # start = datetime.now()
 # print(processor.process(
 #     """I would be very surprise if the senator will be reelected. This should have being his/her job to “shout” as
