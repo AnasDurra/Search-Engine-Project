@@ -70,6 +70,7 @@ def save_evaluation_results(evaluation_results, dataset_name, do_embedding, aver
             f.write("Query ID".ljust(max_query_id_length + 5) + "Value\n")
             for query_id, metrics in evaluation_results.items():
                 metric_value = metrics[metric_name]
+                print(metric_value)
                 f.write(f"{query_id.ljust(max_query_id_length + 5)}, {metric_value:.6f}\n")
 
 
@@ -98,7 +99,7 @@ def main():
 
     evaluation_manager = EvaluationManager(metric_calculators, matcher)
 
-    k = int(os.environ.get('RECALL_PRECISION_THRESHOLD', 10))
+    k = int(os.environ.get('RECALL_PRECISION_THRESHOLD', 11))
     evaluation_results = evaluation_manager.evaluate(queries, qrels, k)
 
     average_map, average_mrr = calculate_average_metrics(evaluation_results)

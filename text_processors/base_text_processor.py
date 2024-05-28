@@ -1,9 +1,11 @@
 from typing import List
+
+import nltk
 import numpy as np
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag, PorterStemmer
+from nltk import pos_tag, PorterStemmer, ne_chunk
 from nltk.corpus import wordnet
 import string
 from spellchecker import SpellChecker
@@ -93,12 +95,32 @@ class BaseTextProcessor:
         return lemmatized_tokens
 
     def _spell_check(self, tokens: List[str]) -> List[str]:
-        return [self.spell_checker.correction(word) for word in tokens if word is not None]
-
+        return [self.spell_checker.correction(word) if isinstance(word, str) else word for word in tokens if
+                word is not None]
     @staticmethod
     def get_tokens_as_string(tokens: List[str]) -> str:
         return ' '.join(tokens)
 
+    def _apply_named_entity_recognition(self, tokens: List[str]) -> List[str]:
+        tagged_tokens = self.pos_tagger(tokens)
+        ner_tags = ne_chunk(tagged_tokens)
+        entities = []
+
+        def extract_entity_text(chunk):
+            if isinstance(chunk, nltk.tree.Tree):
+                return ' '.join([extract_entity_text(c) for c in chunk])
+            else:
+                return chunk[0]
+
+        for chunk in ner_tags:
+            if hasattr(chunk, 'label') and chunk.label() == 'NE':
+                entity = extract_entity_text(chunk.leaves())
+                entities.append(str(entity))
+            else:
+                entity = chunk[0] if isinstance(chunk, nltk.tree.Tree) else chunk[0][0]
+                entities.append(str(entity))
+
+        return entities
     # def _normalize_country_name(self, tokens: List[str]) -> List[str]:
     #     normalized_text = []
     #     for token in tokens:
