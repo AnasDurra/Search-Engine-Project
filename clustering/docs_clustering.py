@@ -1,15 +1,16 @@
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.decomposition import PCA
-import matplotlib.pyplot as plt
+from sklearn.decomposition import TruncatedSVD
 import numpy as np
-
+import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import silhouette_samples
 
 from common.constants import Locations
 from common.file_utilities import FileUtilities
 from database.mongo_helper import MongoDBConnection
 from collections import defaultdict
+
 
 class DocsClustering:
     def __init__(self, model_name: str):
@@ -30,41 +31,52 @@ class DocsClustering:
     def __choose_number_of_clusters(self):
         print("start choosing")
         sum_of_squared_distances = []
-        K = range(1, 10)
+        K = range(1, 36)
         for k in K:
-            km = KMeans(n_clusters=k, random_state=0, n_init='auto')
+            km = KMeans(n_clusters=k, random_state=0, n_init=10,max_iter=300)
             km = km.fit(self.matrix)
             sum_of_squared_distances.append(km.inertia_)
 
-        plt.plot(K, sum_of_squared_distances, 'bx-')
+        # plt.plot(K, sum_of_squared_distances, 'bx-')
+        plt.plot(K, sum_of_squared_distances)
         plt.xlabel('k')
         plt.ylabel('Sum of squared distances')
         plt.title('Elbow Method For Optimal k')
         plt.show()
 
-    def __cluster(self, k=5):
-        kmeans = KMeans(n_clusters=k, random_state=0, n_init='auto').fit(self.matrix)
-        labels = kmeans.labels_
-        self.__print_clusters(labels)
-        print("start evaluation")
-        score = silhouette_score(self.matrix, labels)
+    def __print_silhouette_scores(self, labels):
+        silhouette_vals = silhouette_samples(self.matrix, labels)
+        for i, silhouette in enumerate(silhouette_vals):
+            print(f"Document {i}: Silhouette Score = {silhouette}")
+        avg_score = np.mean(silhouette_vals)
+        print(f"Average Silhouette Score = {avg_score}")
+
+    def __cluster(self, k):
+        kmeans = KMeans(n_clusters=k, random_state=0, n_init=10,max_iter=300)
+        kmeans.fit(self.matrix)
+        y_pred = kmeans.predict(self.matrix)
+        # self.__print_clusters(labels)
+        score = silhouette_score(self.matrix, y_pred)
         print(f'Silhouette Score: {score}')
-        self.__visualize_clusters(kmeans, labels)
+        # self.__visualize_clusters(kmeans, y_pred)
+        # self.__print_silhouette_scores(labels)
 
     def __print_clusters(self, labels):
         clusters = defaultdict(list)
         for idx, label in enumerate(labels):
             clusters[label].append(idx)
 
-        # for cluster_id, document_indices in clusters.items():
-        #     print(f"Cluster {cluster_id}:")
-        #     for doc_index in document_indices:
-        #         print(f" Document {doc_index}")  # Replace with actual document titles or snippets
+        for cluster_id, document_indices in clusters.items():
+            print(f"Cluster {cluster_id}:")
+            for doc_index in document_indices:
+                print(f" Document {doc_index}")
 
     def __visualize_clusters(self, kmeans, labels):
-        pca = PCA(n_components=2)
+        pca = TruncatedSVD(n_components=2)
         reduced_features = pca.fit_transform(self.matrix)
+        # print(reduced_features)
         reduced_cluster_centers = pca.transform(kmeans.cluster_centers_)
+        # print(reduced_cluster_centers)
 
         plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=labels)
         plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=200, c='r')
