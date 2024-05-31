@@ -68,6 +68,7 @@ class BaseEmbeddingModel:
             sg=self.skip_gram,
         )
 
+        
         # prepare the model vocabulary
         self.model.build_vocab(tokenized_docs)
 
