@@ -13,7 +13,7 @@ class EvaluationManager:
 
         for query_id, query_text in queries.items():
             retrieved_docs = self.matcher.match(query_text)[:k]
-            print(len(retrieved_docs))
+            # print(len(retrieved_docs))
             metrics_results = {}
             for metric_calculator in self.metric_calculators:
                 metric_name = metric_calculator.__class__.__name__
