@@ -1,5 +1,6 @@
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+from sklearn.decomposition import PCA
 from sklearn.decomposition import TruncatedSVD
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,6 +22,8 @@ class DocsClustering:
         # Load the model
         model_path: str = Locations.generate_model_path(model_name)
         self.model: TfidfVectorizer = FileUtilities.load_file(model_path)
+
+        print(self.model)
 
         # Database client
         # self.db_collection = MongoDBConnection.get_instance().get_collection(model_name)
@@ -52,13 +55,15 @@ class DocsClustering:
         print(f"Average Silhouette Score = {avg_score}")
 
     def __cluster(self, k):
-        kmeans = KMeans(n_clusters=k, random_state=0, n_init=10,max_iter=300)
+        # kmeans = KMeans(n_clusters=k, random_state=0, n_init=10,max_iter=300)
+        kmeans = KMeans(n_clusters=k, n_init=5,
+                        max_iter=500, random_state=42)
         kmeans.fit(self.matrix)
         y_pred = kmeans.predict(self.matrix)
         # self.__print_clusters(labels)
         score = silhouette_score(self.matrix, y_pred)
         print(f'Silhouette Score: {score}')
-        # self.__visualize_clusters(kmeans, y_pred)
+        self.__visualize_clusters(kmeans, y_pred)
         # self.__print_silhouette_scores(labels)
 
     def __print_clusters(self, labels):
@@ -72,14 +77,15 @@ class DocsClustering:
                 print(f" Document {doc_index}")
 
     def __visualize_clusters(self, kmeans, labels):
-        pca = TruncatedSVD(n_components=2)
-        reduced_features = pca.fit_transform(self.matrix)
-        # print(reduced_features)
+        pca = PCA(n_components=2)
+        reduced_features = pca.fit_transform(self.matrix.toarray())
+
         reduced_cluster_centers = pca.transform(kmeans.cluster_centers_)
         # print(reduced_cluster_centers)
 
-        plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=labels)
-        plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=200, c='r')
+        plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=labels, label=f' {"cluster"}')
+        # plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=200, c='r')
+        plt.legend()
         plt.show()
 
     def perform_clustering(self):
