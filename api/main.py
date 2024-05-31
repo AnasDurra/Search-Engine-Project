@@ -5,10 +5,10 @@ from matchers.embedding.wikipedia_embedding_matcher import WikipediaEmbeddingMat
 from matchers.embedding.antique_embedding_matcher import AntiqueEmbeddingMatcher
 from dotenv import load_dotenv
 
-
 from .dtos import Dataset
 from .dtos import Model
 from .dtos import QueryDto
+from .dtos import QuerySuggestionDto
 
 from bson import ObjectId
 
@@ -56,3 +56,15 @@ async def query(query_dto: QueryDto):
             output = q.match(query_dto.query)
             serializable_output = serialize(output)
             return serializable_output
+
+
+@app.post("/query-suggestions")
+async def query_suggestions(query_suggestion_dto: QuerySuggestionDto):
+    if query_suggestion_dto.dataset == Dataset.antique:
+        matcher = AntiqueEmbeddingMatcher()
+        suggested_queries = matcher.get_similar_queries(query_suggestion_dto.query)
+        print(suggested_queries)
+    if query_suggestion_dto.dataset == Dataset.wiki:
+        matcher = WikipediaEmbeddingMatcher()
+        suggested_queries = matcher.get_similar_queries(query_suggestion_dto.query)
+        print(suggested_queries)
