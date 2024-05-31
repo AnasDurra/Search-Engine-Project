@@ -24,6 +24,7 @@ class BaseEmbeddingMatcher:
         self.model_name = model_name
 
     def match(self, text: str, top: int = 10):
+        print("Query: " + text)
         # preprocess the query
         processed_query: List[str] = self.text_processor.process_query(text)
 

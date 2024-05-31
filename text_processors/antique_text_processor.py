@@ -16,10 +16,8 @@ class AntiqueTextProcessor(BaseTextProcessor):
         tokens = self._remove_registered_markers(tokens)
         tokens = self._lemmatize_tokens(tokens)
         tokens = self._normalize_abbreviations(tokens)
-        # # tokens = self._spell_check(tokens)
         tokens = self._lowercase_tokens(tokens)
         tokens = self._eliminate_whitespaces(tokens)
-        #tokens = self._apply_named_entity_recognition(tokens)
         return tokens
 
     def process_query(self, query) -> List[str]:
@@ -31,8 +29,6 @@ class AntiqueTextProcessor(BaseTextProcessor):
         tokens = self._remove_registered_markers(tokens)
         tokens = self._lemmatize_tokens(tokens)
         tokens = self._normalize_abbreviations(tokens)
-       # tokens = self._spell_check(tokens)
         tokens = self._lowercase_tokens(tokens)
         tokens = self._eliminate_whitespaces(tokens)
-        #tokens = self._apply_named_entity_recognition(tokens)
         return tokens

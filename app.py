@@ -7,10 +7,13 @@ from text_processors.antique_text_processor import AntiqueTextProcessor
 # Load environment variables from .env file
 load_dotenv()
 
-# matcher: AntiqueEmbeddingMatcher = AntiqueEmbeddingMatcher()
+matcher: AntiqueEmbeddingMatcher = AntiqueEmbeddingMatcher()
 # matcher: AntiqueMatcher = AntiqueMatcher()
 query: str = input("Enter a query: ")
-# print(matcher.match(query))
+result = matcher.match(query)
+for match in result:
+    print(match.get('doc_content'))
+    print(match.get('similarity'))
 # from datetime import datetime
 #
 # from text_processors.antique_text_processor import AntiqueTextProcessor

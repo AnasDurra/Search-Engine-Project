@@ -22,8 +22,8 @@ class AveragePrecisionCalculator(MetricCalculator):
                 num_relevant_docs += 1
                 precision_at_i = num_retrieved_relevant_docs / i
                 sum_precisions += precision_at_i
-        print('sum')
-        print(sum_precisions)
+        # print('sum')
+        # print(sum_precisions)
         average_precision = 0 if num_relevant_docs == 0 else sum_precisions / num_relevant_docs
-        print(average_precision)
+        # print(average_precision)
         return average_precision
