@@ -9,9 +9,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from common.constants import Locations
 from common.file_utilities import FileUtilities
 from database.chroma_helper import ChromaHelper
-from dataset.antique_reader import AntiqueReader
 from text_processors.base_text_processor import BaseTextProcessor
-from collections import Counter
 
 
 class BaseEmbeddingMatcher:
@@ -22,8 +20,9 @@ class BaseEmbeddingMatcher:
         self.model: Word2Vec = self.__load_model(model_name)
         self.text_processor = text_processor
         self.model_name = model_name
+        self.n_results = 0
 
-    def match(self, text: str, top: int = 10):
+    def match(self, text: str):
         print("Query: " + text)
         # preprocess the query
         processed_query: List[str] = self.text_processor.process(text)
@@ -34,7 +33,7 @@ class BaseEmbeddingMatcher:
         # query the vector db for similar docs.
         result = self.vector_collection.query(
             query_embeddings=query_embeddings,
-            n_results=5000,
+            n_results=self.n_results,
         )
 
         # Transforming the output to the desired format
@@ -78,12 +77,13 @@ class BaseEmbeddingMatcher:
             if all(word in self.model.wv for word in phrase.split()):
                 phrase_vector = np.mean([self.model.wv[word] for word in phrase.split()], axis=0)
                 similarity_score = np.dot(query_vector, phrase_vector) / (
-                            np.linalg.norm(query_vector) * np.linalg.norm(phrase_vector))
+                        np.linalg.norm(query_vector) * np.linalg.norm(phrase_vector))
                 similar_phrases.append((phrase, similarity_score))
 
         similar_phrases.sort(key=lambda x: x[1], reverse=True)
 
         return [phrase for phrase, _ in similar_phrases[:top_n]]
+
     @staticmethod
     def __load_model(model_name: str):
         return FileUtilities.load_file(
