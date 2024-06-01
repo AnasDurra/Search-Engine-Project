@@ -14,6 +14,11 @@ class PrecisionCalculator(MetricCalculator):
 
         if not relevant_retrieved:
             return 0.0
-        # print('query: ',query_id)
-        # print('precision: ',relevant_retrieved / min(len(retrieved_docs), k))
-        return relevant_retrieved / min(len(retrieved_docs), k)
+
+        denominator = min(len(retrieved_docs), k)
+        if denominator == 0:
+            return 0.0
+
+        precision = relevant_retrieved / denominator
+
+        return precision

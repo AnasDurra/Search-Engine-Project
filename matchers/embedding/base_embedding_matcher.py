@@ -26,7 +26,7 @@ class BaseEmbeddingMatcher:
     def match(self, text: str, top: int = 10):
         print("Query: " + text)
         # preprocess the query
-        processed_query: List[str] = self.text_processor.process_query(text)
+        processed_query: List[str] = self.text_processor.process(text)
 
         # create embeddings
         query_embeddings: List = self.vectorize_query(processed_query).tolist()
@@ -34,7 +34,7 @@ class BaseEmbeddingMatcher:
         # query the vector db for similar docs.
         result = self.vector_collection.query(
             query_embeddings=query_embeddings,
-            n_results=top,
+            n_results=5000,
         )
 
         # Transforming the output to the desired format

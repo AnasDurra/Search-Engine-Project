@@ -16,17 +16,11 @@ class WikipediaReader(DatasetReader, ABC):
 
         df = pd.read_csv(self.file_path)
 
-        doc_count = -10
         for index, row in df.iterrows():
             key = str(row['id_right'])
             value = str(row['text_right'])
 
             key_value_pairs[key] = value
-
-            doc_count -= 1
-
-            if doc_count == 0:
-                break
 
         return key_value_pairs
 
