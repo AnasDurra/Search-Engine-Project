@@ -16,3 +16,8 @@ class QueryDto(BaseModel):
     dataset: Dataset
     model: Model
     query: str
+
+
+class QuerySuggestionDto(BaseModel):
+    query: str
+    dataset: Dataset
