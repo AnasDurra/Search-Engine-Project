@@ -86,6 +86,7 @@ class BaseTFIDFModel:
                 {
                     "doc_id": key,
                     "doc_content": value,
+                    "cluster": 1,  # By default, set to 1
                     "index": idx + 1 + start_idx
                 }
                 for idx, (key, value) in enumerate(chunk)
