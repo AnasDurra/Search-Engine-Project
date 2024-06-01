@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+
 from matchers.tf_idf.wikipedia_matcher import WikipediaMatcher
 from matchers.tf_idf.antique_matcher import AntiqueMatcher
 from matchers.embedding.wikipedia_embedding_matcher import WikipediaEmbeddingMatcher
@@ -15,6 +17,14 @@ from bson import ObjectId
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
