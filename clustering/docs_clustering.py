@@ -18,7 +18,6 @@ from sklearn.preprocessing import StandardScaler
 from common.constants import Locations
 from common.file_utilities import FileUtilities
 from database.mongo_helper import MongoDBConnection
-from collections import defaultdict
 
 from dotenv import load_dotenv
 
@@ -27,6 +26,7 @@ load_dotenv()
 
 class DocsClustering:
     def __init__(self, model_name: str):
+        self.model_name = model_name
         # Load the TF-IDF Matrix
         matrix_path: str = Locations.generate_matrix_path(model_name)
         self.matrix = FileUtilities.load_file(matrix_path)
@@ -39,6 +39,8 @@ class DocsClustering:
         self.db_collection = MongoDBConnection.get_instance().get_collection(model_name)
         self.documents = pd.DataFrame([doc for doc in self.db_collection.find()])
         print(len(self.documents))
+
+        self.pkl_files_path = os.environ.get('CLUSTERS_PATH')
 
     def __choose_number_of_clusters(self):
         print("start choosing")
@@ -71,7 +73,7 @@ class DocsClustering:
         df['cluster'] = cluster_labels
         print(df)
 
-        output_dir = 'clusters/antique_clusters'
+        output_dir = f"{self.pkl_files_path}/{self.model_name}_clusters"
         os.makedirs(output_dir, exist_ok=True)
 
         # Measure time for the original operation
@@ -87,6 +89,7 @@ class DocsClustering:
 
             # Convert the DataFrame back to a sparse matrix
             sparse_matrix = csr_matrix(cluster_data.sparse.to_coo())
+
             cluster_file = os.path.join(output_dir, f'cluster{cluster_num}.pkl')
 
             # Save the sparse matrix and indices in .pkl format
