@@ -1,3 +1,5 @@
+import time
+
 import joblib
 import pandas as pd
 from sklearn.cluster import KMeans
@@ -56,29 +58,42 @@ class DocsClustering:
         print(f"Average Silhouette Score = {avg_score}")
 
     def __cluster(self, k):
-        kmeans = KMeans(n_clusters=k, n_init=25, random_state=12345)
+        kmeans = KMeans(n_clusters=k, random_state=42)
         kmeans.fit(self.matrix)
-
         cluster_labels = kmeans.labels_
+
         # create a DataFrame to hold the TF-IDF vectors and their corresponding cluster labels
-        df = pd.DataFrame(self.matrix.toarray())
+        df = pd.DataFrame.sparse.from_spmatrix(self.matrix)
         df['cluster'] = cluster_labels
+        print(df)
+
         output_dir = 'clusters/antique_clusters'
         os.makedirs(output_dir, exist_ok=True)
+
+        # Measure time for the original operation
+        start_time = time.time()
+        start_original = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(start_time))
+        print(start_original)
 
         # Save each cluster
         for cluster_num in range(k):
             print(f"Cluster {cluster_num}")
             cluster_data = df[df['cluster'] == cluster_num].drop(columns='cluster')
             cluster_indices = df[df['cluster'] == cluster_num].index.values + 1
+
             # Convert the DataFrame back to a sparse matrix
-            sparse_matrix = csr_matrix(cluster_data.values)
+            sparse_matrix = csr_matrix(cluster_data.sparse.to_coo())
             cluster_file = os.path.join(output_dir, f'cluster{cluster_num}.pkl')
+
             # Save the sparse matrix and indices in .pkl format
             with open(cluster_file, 'wb') as f:
+                print((sparse_matrix,cluster_indices))
                 joblib.dump((sparse_matrix, cluster_indices), f)
 
-        self.documents['cluster'] = kmeans.labels_
+        end_time = time.time()
+        end_original = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(end_time))
+        print(end_original)
+        self.documents['cluster'] = cluster_labels
 
         # Update MongoDB with the new cluster labels
         for idx, row in self.documents.iterrows():
@@ -107,8 +122,8 @@ class DocsClustering:
         # score = silhouette_score(self.matrix, labels)
         # print(f'Silhouette Score: {score}')
         # self.__visualize_clusters(kmeans, cluster_labels)
-        self.__plot_clusters(cluster_labels)
         # self.__print_silhouette_scores(labels)
+        self.__plot_clusters(cluster_labels)
 
     def __visualize_clusters(self, kmeans, labels):
         # Predicting the clusters
@@ -144,7 +159,7 @@ class DocsClustering:
         plt.scatter(C_transformed[:, 0], C_transformed[:, 1], c=centroidColor, s=200, marker=('x'))
         plt.show()
 
-    def __plot_clusters(self,labels):
+    def __plot_clusters(self, labels):
         svd = TruncatedSVD(n_components=2)
         tfidf_matrix_2d = svd.fit_transform(self.matrix)
         scaler = StandardScaler()

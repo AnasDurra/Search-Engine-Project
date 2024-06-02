@@ -51,7 +51,7 @@ if __name__ == "__main__":
     document = {
         "_id": "665af6f91bdb60b7be02db86",
         "doc_id": "2474377_0",
-        "doc_content": "Iraq and Iran",
+        "doc_content": "Iraq",
         "cluster": 1,
         "index": 509
     }
