@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -7,10 +8,10 @@ from matchers.embedding.wikipedia_embedding_matcher import WikipediaEmbeddingMat
 from matchers.embedding.antique_embedding_matcher import AntiqueEmbeddingMatcher
 from dotenv import load_dotenv
 
-from .dtos import Dataset
-from .dtos import Model
-from .dtos import QueryDto
-from .dtos import QuerySuggestionDto
+from api.dtos import Dataset
+from api.dtos import Model
+from api.dtos import QueryDto
+from api.dtos import QuerySuggestionDto
 
 from bson import ObjectId
 
@@ -79,3 +80,5 @@ async def query_suggestions(query_suggestion_dto: QuerySuggestionDto):
         matcher = WikipediaEmbeddingMatcher()
         suggested_queries = matcher.get_similar_queries(query_suggestion_dto.query)
         return {"suggestions": suggested_queries}
+
+

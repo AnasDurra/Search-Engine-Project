@@ -1,7 +1,6 @@
 import os
 
 from matchers.embedding.base_embedding_matcher import BaseEmbeddingMatcher
-from text_processors.antique_text_processor import AntiqueTextProcessor
 from text_processors.wikipedia_text_processor import WikipediaTextProcessor
 
 
