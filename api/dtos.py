@@ -21,3 +21,12 @@ class QueryDto(BaseModel):
 class QuerySuggestionDto(BaseModel):
     query: str
     dataset: Dataset
+
+
+class SimilarResultsDto(BaseModel):
+    id: str
+    doc_id: str
+    doc_content: str
+    cluster: int
+    index: int
+    dataset: Dataset

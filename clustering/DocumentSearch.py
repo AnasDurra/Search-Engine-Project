@@ -5,6 +5,10 @@ from common.constants import Locations
 from common.file_utilities import FileUtilities
 from database.mongo_helper import MongoDBConnection
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class DocumentSearch:
     def __init__(self, db_collection_name: str, model_path: str):
@@ -19,7 +23,8 @@ class DocumentSearch:
         document_vector = self.get_document_vector(document["doc_content"])
         cluster_num = document["cluster"]
 
-        pkl_file_path = f"clusters/antique_clusters/cluster{cluster_num}.pkl"
+        # pkl_file_path = f"clusters/antique_clusters/cluster{cluster_num}.pkl"
+        pkl_file_path = f"C:/Users/ASUS/Desktop/search-engine/clustering/clusters/antique_clusters/cluster{cluster_num}.pkl"
 
         if os.path.exists(pkl_file_path):
             with open(pkl_file_path, 'rb') as f:

@@ -6,12 +6,15 @@ from matchers.tf_idf.wikipedia_matcher import WikipediaMatcher
 from matchers.tf_idf.antique_matcher import AntiqueMatcher
 from matchers.embedding.wikipedia_embedding_matcher import WikipediaEmbeddingMatcher
 from matchers.embedding.antique_embedding_matcher import AntiqueEmbeddingMatcher
+from clustering.DocumentSearch import DocumentSearch
+
 from dotenv import load_dotenv
 
 from api.dtos import Dataset
 from api.dtos import Model
 from api.dtos import QueryDto
 from api.dtos import QuerySuggestionDto
+from api.dtos import SimilarResultsDto
 
 from bson import ObjectId
 
@@ -81,4 +84,30 @@ async def query_suggestions(query_suggestion_dto: QuerySuggestionDto):
         suggested_queries = matcher.get_similar_queries(query_suggestion_dto.query)
         return {"suggestions": suggested_queries}
 
+
+@app.post("/similar-results")
+async def similar_results(similar_results_dto: SimilarResultsDto):
+    if similar_results_dto.dataset == Dataset.antique:
+        search = DocumentSearch("antique", "antique")
+        document = {
+            "_id": similar_results_dto.id,
+            "doc_id": similar_results_dto.doc_id,
+            "doc_content": similar_results_dto.doc_content,
+            "cluster": similar_results_dto.cluster,
+            "index": similar_results_dto.index
+        }
+        results = search.query(document)
+        serializable_output = serialize(results)
+        return serializable_output
+    if similar_results_dto.dataset == Dataset.wiki:
+        search = DocumentSearch("wikipedia", "wikipedia")
+        document = {
+            "_id": similar_results_dto.id,
+            "doc_id": similar_results_dto.doc_id,
+            "doc_content": similar_results_dto.doc_content,
+            "cluster": similar_results_dto.cluster,
+            "index": similar_results_dto.index
+        }
+        results = search.query(document)
+        print(results)
 
