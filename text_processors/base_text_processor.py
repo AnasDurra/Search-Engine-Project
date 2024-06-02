@@ -66,9 +66,6 @@ class BaseTextProcessor:
     def _remove_apostrophes(tokens: List[str]) -> List[str]:
         return [str(np.char.replace(token, "'", " ")) for token in tokens if token is not None]
 
-    def _apply_stemming(self, tokens: List[str]) -> List[str]:
-        return [self.stemmer.stem(token) for token in tokens]
-
     @staticmethod
     def _normalize_abbreviations(tokens: List[str]) -> List[str]:
         resolved_terms = {}
