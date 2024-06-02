@@ -11,10 +11,13 @@ load_dotenv()
 
 
 class DocumentSearch:
-    def __init__(self, db_collection_name: str, model_path: str):
-        self.db_collection = MongoDBConnection.get_instance().get_collection(db_collection_name)
-        self.model_path = Locations.generate_model_path(model_path)
+    def __init__(self, model_name: str):
+        load_dotenv()
+        self.model_name = model_name
+        self.db_collection = MongoDBConnection.get_instance().get_collection(model_name)
+        self.model_path = Locations.generate_model_path(model_name)
         self.tfidf_vectorizer = FileUtilities.load_file(self.model_path)
+        self.pkl_files_path = os.environ.get('CLUSTERS_PATH')
 
     def get_document_vector(self, doc_content: str):
         return self.tfidf_vectorizer.transform([doc_content])
@@ -23,9 +26,7 @@ class DocumentSearch:
         document_vector = self.get_document_vector(document["doc_content"])
         cluster_num = document["cluster"]
 
-        # pkl_file_path = f"clusters/antique_clusters/cluster{cluster_num}.pkl"
-        pkl_file_path = f"C:/Users/ASUS/Desktop/search-engine/clustering/clusters/antique_clusters/cluster{cluster_num}.pkl"
-
+        pkl_file_path = f"{self.pkl_files_path}/{self.model_name}_clusters/cluster{cluster_num}.pkl"
         if os.path.exists(pkl_file_path):
             with open(pkl_file_path, 'rb') as f:
                 sparse_matrix, cluster_indices = joblib.load(f)
@@ -52,7 +53,7 @@ class DocumentSearch:
 
 # Example usage
 if __name__ == "__main__":
-    search = DocumentSearch("antique", "antique")
+    search = DocumentSearch("antique")
     document = {
         "_id": "665af6f91bdb60b7be02db86",
         "doc_id": "2474377_0",

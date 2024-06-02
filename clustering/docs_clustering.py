@@ -80,19 +80,19 @@ class DocsClustering:
         print(start_original)
 
         # Save each cluster
-        # for cluster_num in range(k):
-        #     print(f"Cluster {cluster_num}")
-        #     cluster_data = df[df['cluster'] == cluster_num].drop(columns='cluster')
-        #     cluster_indices = df[df['cluster'] == cluster_num].index.values + 1
-        #
-        #     # Convert the DataFrame back to a sparse matrix
-        #     sparse_matrix = csr_matrix(cluster_data.sparse.to_coo())
-        #     cluster_file = os.path.join(output_dir, f'cluster{cluster_num}.pkl')
-        #
-        #     # Save the sparse matrix and indices in .pkl format
-        #     with open(cluster_file, 'wb') as f:
-        #         print((sparse_matrix,cluster_indices))
-        #         joblib.dump((sparse_matrix, cluster_indices), f)
+        for cluster_num in range(k):
+            print(f"Cluster {cluster_num}")
+            cluster_data = df[df['cluster'] == cluster_num].drop(columns='cluster')
+            cluster_indices = df[df['cluster'] == cluster_num].index.values + 1
+
+            # Convert the DataFrame back to a sparse matrix
+            sparse_matrix = csr_matrix(cluster_data.sparse.to_coo())
+            cluster_file = os.path.join(output_dir, f'cluster{cluster_num}.pkl')
+
+            # Save the sparse matrix and indices in .pkl format
+            with open(cluster_file, 'wb') as f:
+                print((sparse_matrix,cluster_indices))
+                joblib.dump((sparse_matrix, cluster_indices), f)
 
         end_time = time.time()
         end_original = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(end_time))
