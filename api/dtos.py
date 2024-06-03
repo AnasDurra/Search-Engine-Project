@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class Model(str, Enum):
     tfidf = "tfidf"
-    embedding: "embedding"
+    embedding = "embedding"
 
 
 class Dataset(str, Enum):
@@ -30,3 +30,8 @@ class SimilarResultsDto(BaseModel):
     cluster: int
     index: int
     dataset: Dataset
+
+
+class TopicsDto(BaseModel):
+    dataset: Dataset
+    cluster: int

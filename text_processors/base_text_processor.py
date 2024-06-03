@@ -67,7 +67,7 @@ class BaseTextProcessor:
         return [str(np.char.replace(token, "'", " ")) for token in tokens if token is not None]
 
     @staticmethod
-    def _normalize_abbreviations(tokens: List[str]) -> List[str]:
+    def _process_abbreviations(tokens: List[str]) -> List[str]:
         resolved_terms = {}
         for token in tokens:
 
@@ -94,6 +94,7 @@ class BaseTextProcessor:
     def _spell_check(self, tokens: List[str]) -> List[str]:
         return [self.spell_checker.correction(word) if isinstance(word, str) else word for word in tokens if
                 word is not None]
+
     @staticmethod
     def get_tokens_as_string(tokens: List[str]) -> str:
         return ' '.join(tokens)

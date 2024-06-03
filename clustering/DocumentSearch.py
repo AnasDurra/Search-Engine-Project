@@ -12,7 +12,6 @@ load_dotenv()
 
 class DocumentSearch:
     def __init__(self, model_name: str):
-        load_dotenv()
         self.model_name = model_name
         self.db_collection = MongoDBConnection.get_instance().get_collection(model_name)
         self.model_path = Locations.generate_model_path(model_name)

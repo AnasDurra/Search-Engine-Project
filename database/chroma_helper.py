@@ -20,7 +20,7 @@ class ChromaHelper:
 
     def __init__(self):
         """
-        Private constructor to initialize the MongoDB connection.
+        Private constructor to initialize the Chroma connection.
         """
         if ChromaHelper.__instance is not None:
             raise Exception("ChromaHelper is a singleton class. Use get_instance() method to get the instance.")
@@ -33,5 +33,5 @@ class ChromaHelper:
     def get_or_create_collection(self, collection_name: str) -> Collection:
         return self.client.get_or_create_collection(
             name=collection_name,
-            metadata={"hnsw:space": "cosine"},  # l2 is the default
+            metadata={"hnsw:space": "cosine"},
         )

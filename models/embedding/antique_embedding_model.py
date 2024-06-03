@@ -17,3 +17,5 @@ class AntiqueEmbeddingModel(BaseEmbeddingModel):
             text_processor=AntiqueTextProcessor(),
             model_name=model_name
         )
+        self.vector_size = int(os.environ.get('ANTIQUE_VECTOR_SIZE', 500))
+        self.epochs = int(os.environ.get('ANTIQUE_EPOCHS', 50))

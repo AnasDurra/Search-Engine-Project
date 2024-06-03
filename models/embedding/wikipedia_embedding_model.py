@@ -17,3 +17,5 @@ class WikipediaEmbeddingModel(BaseEmbeddingModel):
             text_processor=WikipediaTextProcessor(),
             model_name=model_name
         )
+        self.vector_size = int(os.environ.get('WIKIPEDIA_VECTOR_SIZE', 500))
+        self.epochs = int(os.environ.get('WIKIPEDIA_EPOCHS', 50))
