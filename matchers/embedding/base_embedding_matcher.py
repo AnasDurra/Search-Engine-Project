@@ -2,7 +2,7 @@ import os
 from typing import List
 
 import numpy as np
-from gensim.models import Doc2Vec, Word2Vec
+from gensim.models import Word2Vec
 from numpy import ndarray
 from sklearn.feature_extraction.text import CountVectorizer
 
@@ -24,13 +24,11 @@ class BaseEmbeddingMatcher:
 
     def match(self, text: str):
         print("Query: " + text)
-        # preprocess the query
+
         processed_query: List[str] = self.text_processor.process(text)
 
-        # create embeddings
         query_embeddings: List = self.vectorize_query(processed_query).tolist()
 
-        # query the vector db for similar docs.
         result = self.vector_collection.query(
             query_embeddings=query_embeddings,
             n_results=self.n_results,
@@ -65,7 +63,7 @@ class BaseEmbeddingMatcher:
         return query_vec
 
     def get_similar_queries(self, query_text: str, top_n=10):
-        processed_query = self.text_processor.process_query(query_text)
+        processed_query = self.text_processor.process(query_text)
         query_vector = self.vectorize_query(processed_query)
 
         vectorizer = CountVectorizer(ngram_range=(3, 10))

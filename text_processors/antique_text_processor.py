@@ -15,20 +15,7 @@ class AntiqueTextProcessor(BaseTextProcessor):
         tokens = self._filter_stop_words(tokens)
         tokens = self._remove_registered_markers(tokens)
         tokens = self._lemmatize_tokens(tokens)
-        tokens = self._normalize_abbreviations(tokens)
-        tokens = self._lowercase_tokens(tokens)
-        tokens = self._eliminate_whitespaces(tokens)
-        return tokens
-
-    def process_query(self, query) -> List[str]:
-        tokens = self._word_tokenizer(query)
-        tokens = self._lowercase_tokens(tokens)
-        tokens = self._strip_punctuation(tokens)
-        tokens = self._remove_apostrophes(tokens)
-        tokens = self._filter_stop_words(tokens)
-        tokens = self._remove_registered_markers(tokens)
-        tokens = self._lemmatize_tokens(tokens)
-        tokens = self._normalize_abbreviations(tokens)
+        tokens = self._process_abbreviations(tokens)
         tokens = self._lowercase_tokens(tokens)
         tokens = self._eliminate_whitespaces(tokens)
         return tokens

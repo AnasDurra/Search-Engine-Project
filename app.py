@@ -19,7 +19,7 @@ for match in result:
 # from text_processors.antique_text_processor import AntiqueTextProcessor
 #
 processor = AntiqueTextProcessor()
-print(processor.process_query(query))
+print(processor.process(query))
 # start = datetime.now()
 # print(processor.process(
 #     """I would be very surprise if the senator will be reelected. This should have being his/her job to “shout” as

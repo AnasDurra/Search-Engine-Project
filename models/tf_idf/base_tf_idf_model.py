@@ -14,7 +14,6 @@ from text_processors.base_text_processor import BaseTextProcessor
 
 class BaseTFIDFModel:
 
-    # initialize default variables
     def __init__(
             self,
             dataset_reader: DatasetReader,
@@ -43,33 +42,26 @@ class BaseTFIDFModel:
         )
 
     def train(self, number_of_docs: Optional[int] = None) -> None:
-        # first, load the dataset
+
         dataset: dict = self.dataset_reader.load_as_dict()
 
-        # second, check if the dataset is stored in the database or not.
         if not self.db_connection.collection_exists(self.model_name):
             self.store_dataset_in_db(dataset=dataset)
 
-        # extract the list of data based on the number_of_docs argument
         if number_of_docs is not None:
             documents: list = list(dataset.values())[:number_of_docs]
         else:
             documents: list = list(dataset.values())
 
-        # pass the training documents to the model
         tfidf_matrix = self.vectorizer.fit_transform(documents)
 
-        # store the resulted TF-IDF Matrix
         FileUtilities.save_file(Locations.generate_matrix_path(self.model_name), tfidf_matrix)
 
-        # store the vectorizer model (in project folder called engines)
         FileUtilities.save_file(Locations.generate_model_path(self.model_name), self.vectorizer)
 
     def store_dataset_in_db(self, dataset: dict) -> None:
-        # create a new collection
         self.db_connection.create_collection(self.model_name)
 
-        # get the created collection
         collection: Collection = self.db_connection.get_collection(self.model_name)
 
         # insert documents as chunks (5000 in each)
