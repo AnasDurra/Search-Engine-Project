@@ -7,6 +7,7 @@ from matchers.tf_idf.antique_matcher import AntiqueMatcher
 from matchers.embedding.wikipedia_embedding_matcher import WikipediaEmbeddingMatcher
 from matchers.embedding.antique_embedding_matcher import AntiqueEmbeddingMatcher
 from clustering.DocumentSearch import DocumentSearch
+from clustering.ClusterTopicRetriever import ClusterTopicRetriever
 
 from dotenv import load_dotenv
 
@@ -15,6 +16,7 @@ from api.dtos import Model
 from api.dtos import QueryDto
 from api.dtos import QuerySuggestionDto
 from api.dtos import SimilarResultsDto
+from api.dtos import TopicsDto
 
 from bson import ObjectId
 
@@ -112,3 +114,14 @@ async def similar_results(similar_results_dto: SimilarResultsDto):
         serializable_output = serialize(results)
         return serializable_output
 
+
+@app.post("/topics")
+async def topics(topic_dto: TopicsDto):
+    if topic_dto.dataset == Dataset.wiki:
+        topic_retriever = ClusterTopicRetriever("wikipedia")
+        results = topic_retriever.get_topic_file(topic_dto.cluster)
+        return results
+    if topic_dto.dataset == Dataset.antique:
+        topic_retriever = ClusterTopicRetriever("antique")
+        results = topic_retriever.get_topic_file(topic_dto.cluster)
+        return results
