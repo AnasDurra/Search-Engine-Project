@@ -109,5 +109,6 @@ async def similar_results(similar_results_dto: SimilarResultsDto):
             "index": similar_results_dto.index
         }
         results = search.query(document)
-        print(results)
+        serializable_output = serialize(results)
+        return serializable_output
 

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class Model(str, Enum):
     tfidf = "tfidf"
-    embedding: "embedding"
+    embedding = "embedding"
 
 
 class Dataset(str, Enum):
