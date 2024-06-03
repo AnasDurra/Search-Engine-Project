@@ -88,7 +88,7 @@ async def query_suggestions(query_suggestion_dto: QuerySuggestionDto):
 @app.post("/similar-results")
 async def similar_results(similar_results_dto: SimilarResultsDto):
     if similar_results_dto.dataset == Dataset.antique:
-        search = DocumentSearch("antique", "antique")
+        search = DocumentSearch("antique")
         document = {
             "_id": similar_results_dto.id,
             "doc_id": similar_results_dto.doc_id,
@@ -100,7 +100,7 @@ async def similar_results(similar_results_dto: SimilarResultsDto):
         serializable_output = serialize(results)
         return serializable_output
     if similar_results_dto.dataset == Dataset.wiki:
-        search = DocumentSearch("wikipedia", "wikipedia")
+        search = DocumentSearch("wikipedia")
         document = {
             "_id": similar_results_dto.id,
             "doc_id": similar_results_dto.doc_id,
